@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  server:
+    container_name: helpnest_callback_processor
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
+    environment:
+      NODE_ENV: development
+      PORT: 8008
+      DB_URL: "mongodb://172.16.71.134:27017/helpnest_dev"
+      SECRET_KEY: "l7/GMnI+xL32z4ZxagZDbYl9f7kFxDYqh/QJYlAI/tkId4dsiIMZJH+2/CauetMo6/RyDc/L2rvVxn/b73Pe/Th/+F6jozO8fi560W5dmzg="
+      LOG_FORMAT: "dev"
+      LOG_DIR: "../logs" # You might need to adjust your app's logging configuration
+      ORIGIN: "*"
+      CREDENTIALS: "true"
+      REDIS_HOST: "172.16.71.134"
+      REDIS_USERNAME: "default"
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: "sTtTcDqqlGNIGcwsjakgA1spQ2"
+      REDIS_URL: "redis://:sTtTcDqqlGNIGcwsjakgA1spQ2@172.16.71.134:6379/0"
+    volumes:
+      - ./:/app
+      - /app/node_modules
+      - logs:/app/src/logs/  # Volume for logs
+    restart: "unless-stopped"
+    depends_on: []
+    network_mode: host
+
+volumes:
+  logs:
+    driver: local
