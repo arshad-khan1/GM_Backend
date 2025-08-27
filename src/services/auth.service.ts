@@ -18,12 +18,11 @@ class AuthService {
 
     const createUserData = await UserModel.create({
       ...userData,
-      password: hashedPassword,
     });
 
     const createPassword = await PasswordModel.create({
       user_id: createUserData._id,
-      password: hashedPassword,
+      passwordHash: hashedPassword,
     });
     if (!createPassword) throw new HttpException(409, 'Password not created');
 
@@ -41,7 +40,7 @@ class AuthService {
     const findPassword = await PasswordModel.findOne({ user_id: findUser._id });
     if (!findPassword) throw new HttpException(404, 'Password not found');
 
-    const isPasswordMatching = await bcrypt.compare(password, findPassword.password);
+    const isPasswordMatching = await bcrypt.compare(password, findPassword.passwordHash);
     if (!isPasswordMatching) throw new HttpException(400, 'Invalid credentials');
 
     const token = jwt.sign({ _id: findUser._id }, SECRET_KEY, { expiresIn: '7d' }); // Replace 'secretKey' with a strong, environment-specific secret
