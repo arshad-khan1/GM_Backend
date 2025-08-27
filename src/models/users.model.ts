@@ -2,45 +2,41 @@ import mongoose, { Schema, Document } from 'mongoose';
 import { User } from '@interfaces/users.interface';
 
 const userSchema: Schema = new Schema({
-  name: {
-    type: String,
-    required: false,
+  role: {
+    type: Number,
+    required: true,
+    enum: [0, 1, 2], // 0-Superadmin, 1-Admin(Owner)/Staff, 2-Member
+    default: 2, // Default to Member
   },
   email: {
     type: String,
     required: true,
     unique: true,
+    trim: true,
+    lowercase: true,
   },
-  rolePreference: {
+  fullName: {
     type: String,
-    enum: ['SELLER', 'BUYER', 'BOTH'],
-    default: 'BOTH',
+    required: true,
+    trim: true,
   },
-  roles: {
-    type: Number,
-    default: 2, // Default to User role
-  },
-  contactNumber: {
+  phone: {
     type: String,
+    trim: true,
   },
-  companyName: {
+  profilePhotoUrl: {
     type: String,
-  },
-  city: {
-    type: String,
-  },
-  verified: {
-    type: Number,
-    default: 0,
+    default: '',
   },
   isActive: {
     type: Number,
-    default: 1,
-  },
-  metadata: {
-    type: Schema.Types.Mixed,
+    default: 1, // 0 - Inactive, 1 - Active
   },
   createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
     type: Date,
     default: Date.now,
   },
@@ -49,16 +45,19 @@ const userSchema: Schema = new Schema({
     ref: 'User',
     default: null,
   },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
   updatedBy: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     default: null,
   },
 });
+
+// Add indexes
+userSchema.index({ email: 1 }, { unique: true });
+userSchema.index({ phone: 1 });
+
+// Add timestamps
+userSchema.set('timestamps', true);
 
 const UserModel = mongoose.model<User & Document>('User', userSchema);
 
