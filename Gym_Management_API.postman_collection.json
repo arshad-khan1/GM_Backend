@@ -1,0 +1,675 @@
+{
+	"info": {
+		"_postman_id": "gym-management-api",
+		"name": "Gym Management API",
+		"description": "Complete CRUD operations for Gym Management System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{auth_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\",\n  \"rolePreference\": \"SELLER\",\n  \"roles\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "login"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Gyms",
+			"item": [
+				{
+					"name": "Get All Gyms",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "{{base_url}}/gyms", "host": ["{{base_url}}"], "path": ["gyms"]}
+					}
+				},
+				{
+					"name": "Get Gym By ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/gyms/:id",
+							"host": ["{{base_url}}"],
+							"path": ["gyms", ":id"],
+							"variable": [{"key": "id", "value": "gym_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Create Gym",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ownerId\": \"owner_id_here\",\n  \"name\": \"Fitness Center\",\n  \"address\": {\n    \"line1\": \"123 Main St\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"zipcode\": \"10001\",\n    \"country\": \"USA\"\n  },\n  \"location\": {\n    \"lat\": \"40.7128\",\n    \"lon\": \"-74.0060\",\n    \"name\": \"Manhattan Fitness\"\n  }\n}"
+						},
+						"url": {"raw": "{{base_url}}/gyms", "host": ["{{base_url}}"], "path": ["gyms"]}
+					}
+				},
+				{
+					"name": "Update Gym",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {"mode": "raw", "raw": "{\n  \"name\": \"Updated Fitness Center\"\n}"},
+						"url": {
+							"raw": "{{base_url}}/gyms/:id",
+							"host": ["{{base_url}}"],
+							"path": ["gyms", ":id"],
+							"variable": [{"key": "id", "value": "gym_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Delete Gym",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "{{base_url}}/gyms/:id",
+							"host": ["{{base_url}}"],
+							"path": ["gyms", ":id"],
+							"variable": [{"key": "id", "value": "gym_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Update Gym Status",
+					"request": {
+						"method": "PATCH",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {"mode": "raw", "raw": "{\n  \"_id\": \"gym_id_here\",\n  \"isActive\": 0\n}"},
+						"url": {"raw": "{{base_url}}/gyms/status", "host": ["{{base_url}}"], "path": ["gyms", "status"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "Gym Users",
+			"item": [
+				{
+					"name": "Get All Gym Users",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "{{base_url}}/gym-users", "host": ["{{base_url}}"], "path": ["gym-users"]}
+					}
+				},
+				{
+					"name": "Get Gym User By ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/gym-users/:id",
+							"host": ["{{base_url}}"],
+							"path": ["gym-users", ":id"],
+							"variable": [{"key": "id", "value": "gym_user_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Create Gym User",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"gymId\": \"gym_id_here\",\n  \"userId\": \"user_id_here\",\n  \"role\": \"MANAGER\",\n  \"permissions\": [\"READ\", \"WRITE\"]\n}"
+						},
+						"url": {"raw": "{{base_url}}/gym-users", "host": ["{{base_url}}"], "path": ["gym-users"]}
+					}
+				},
+				{
+					"name": "Update Gym User",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {"mode": "raw", "raw": "{\n  \"role\": \"TRAINER\",\n  \"permissions\": [\"READ\"]\n}"},
+						"url": {
+							"raw": "{{base_url}}/gym-users/:id",
+							"host": ["{{base_url}}"],
+							"path": ["gym-users", ":id"],
+							"variable": [{"key": "id", "value": "gym_user_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Delete Gym User",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "{{base_url}}/gym-users/:id",
+							"host": ["{{base_url}}"],
+							"path": ["gym-users", ":id"],
+							"variable": [{"key": "id", "value": "gym_user_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Update Gym User Status",
+					"request": {
+						"method": "PATCH",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {"mode": "raw", "raw": "{\n  \"_id\": \"gym_user_id_here\",\n  \"isActive\": 0\n}"},
+						"url": {"raw": "{{base_url}}/gym-users/status", "host": ["{{base_url}}"], "path": ["gym-users", "status"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "Membership Plans",
+			"item": [
+				{
+					"name": "Get All Membership Plans",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "{{base_url}}/membership-plans", "host": ["{{base_url}}"], "path": ["membership-plans"]}
+					}
+				},
+				{
+					"name": "Get Membership Plan By ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/membership-plans/:id",
+							"host": ["{{base_url}}"],
+							"path": ["membership-plans", ":id"],
+							"variable": [{"key": "id", "value": "plan_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Create Membership Plan",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"gymId\": \"gym_id_here\",\n  \"planName\": \"Premium Plan\",\n  \"description\": \"Full access to all facilities\",\n  \"price\": 99.99,\n  \"duration\": 30,\n  \"benefits\": [\"Gym Access\", \"Pool Access\", \"Personal Training\"]\n}"
+						},
+						"url": {"raw": "{{base_url}}/membership-plans", "host": ["{{base_url}}"], "path": ["membership-plans"]}
+					}
+				},
+				{
+					"name": "Update Membership Plan",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {"mode": "raw", "raw": "{\n  \"planName\": \"Updated Premium Plan\",\n  \"price\": 89.99\n}"},
+						"url": {
+							"raw": "{{base_url}}/membership-plans/:id",
+							"host": ["{{base_url}}"],
+							"path": ["membership-plans", ":id"],
+							"variable": [{"key": "id", "value": "plan_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Delete Membership Plan",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "{{base_url}}/membership-plans/:id",
+							"host": ["{{base_url}}"],
+							"path": ["membership-plans", ":id"],
+							"variable": [{"key": "id", "value": "plan_id_here"}]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Members",
+			"item": [
+				{
+					"name": "Get All Members",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "{{base_url}}/members", "host": ["{{base_url}}"], "path": ["members"]}
+					}
+				},
+				{
+					"name": "Get Member By ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/members/:id",
+							"host": ["{{base_url}}"],
+							"path": ["members", ":id"],
+							"variable": [{"key": "id", "value": "member_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Create Member",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"gymId\": \"gym_id_here\",\n  \"userId\": \"user_id_here\",\n  \"membershipNumber\": \"MEM001\",\n  \"joinDate\": \"2024-01-01T00:00:00.000Z\",\n  \"subscriptions\": [\"subscription_id_here\"]\n}"
+						},
+						"url": {"raw": "{{base_url}}/members", "host": ["{{base_url}}"], "path": ["members"]}
+					}
+				},
+				{
+					"name": "Update Member",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {"mode": "raw", "raw": "{\n  \"membershipNumber\": \"MEM002\"\n}"},
+						"url": {
+							"raw": "{{base_url}}/members/:id",
+							"host": ["{{base_url}}"],
+							"path": ["members", ":id"],
+							"variable": [{"key": "id", "value": "member_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Delete Member",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "{{base_url}}/members/:id",
+							"host": ["{{base_url}}"],
+							"path": ["members", ":id"],
+							"variable": [{"key": "id", "value": "member_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Update Member Status",
+					"request": {
+						"method": "PATCH",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {"mode": "raw", "raw": "{\n  \"_id\": \"member_id_here\",\n  \"isActive\": 0\n}"},
+						"url": {"raw": "{{base_url}}/members/status", "host": ["{{base_url}}"], "path": ["members", "status"]}
+					}
+				}
+			]
+		},
+		{
+			"name": "Subscriptions",
+			"item": [
+				{
+					"name": "Get All Subscriptions",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "{{base_url}}/subscriptions", "host": ["{{base_url}}"], "path": ["subscriptions"]}
+					}
+				},
+				{
+					"name": "Get Subscription By ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/subscriptions/:id",
+							"host": ["{{base_url}}"],
+							"path": ["subscriptions", ":id"],
+							"variable": [{"key": "id", "value": "subscription_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Create Subscription",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"memberId\": \"member_id_here\",\n  \"planId\": \"plan_id_here\",\n  \"startDate\": \"2024-01-01T00:00:00.000Z\",\n  \"endDate\": \"2024-02-01T00:00:00.000Z\",\n  \"subscriptionActive\": true\n}"
+						},
+						"url": {"raw": "{{base_url}}/subscriptions", "host": ["{{base_url}}"], "path": ["subscriptions"]}
+					}
+				},
+				{
+					"name": "Update Subscription",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {"mode": "raw", "raw": "{\n  \"endDate\": \"2024-03-01T00:00:00.000Z\",\n  \"subscriptionActive\": false\n}"},
+						"url": {
+							"raw": "{{base_url}}/subscriptions/:id",
+							"host": ["{{base_url}}"],
+							"path": ["subscriptions", ":id"],
+							"variable": [{"key": "id", "value": "subscription_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Delete Subscription",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "{{base_url}}/subscriptions/:id",
+							"host": ["{{base_url}}"],
+							"path": ["subscriptions", ":id"],
+							"variable": [{"key": "id", "value": "subscription_id_here"}]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Payments",
+			"item": [
+				{
+					"name": "Get All Payments",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "{{base_url}}/payments", "host": ["{{base_url}}"], "path": ["payments"]}
+					}
+				},
+				{
+					"name": "Get Payment By ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/payments/:id",
+							"host": ["{{base_url}}"],
+							"path": ["payments", ":id"],
+							"variable": [{"key": "id", "value": "payment_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Create Payment",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"subscriptionId\": \"subscription_id_here\",\n  \"amount\": 99.99,\n  \"paymentDate\": \"2024-01-01T00:00:00.000Z\",\n  \"paymentMethod\": \"CREDIT_CARD\",\n  \"paymentStatus\": \"COMPLETED\",\n  \"transactionId\": \"TXN123456\"\n}"
+						},
+						"url": {"raw": "{{base_url}}/payments", "host": ["{{base_url}}"], "path": ["payments"]}
+					}
+				},
+				{
+					"name": "Update Payment",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {"mode": "raw", "raw": "{\n  \"paymentStatus\": \"REFUNDED\"\n}"},
+						"url": {
+							"raw": "{{base_url}}/payments/:id",
+							"host": ["{{base_url}}"],
+							"path": ["payments", ":id"],
+							"variable": [{"key": "id", "value": "payment_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Delete Payment",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "{{base_url}}/payments/:id",
+							"host": ["{{base_url}}"],
+							"path": ["payments", ":id"],
+							"variable": [{"key": "id", "value": "payment_id_here"}]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "Get All Notifications",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "{{base_url}}/notifications", "host": ["{{base_url}}"], "path": ["notifications"]}
+					}
+				},
+				{
+					"name": "Get Notification By ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/notifications/:id",
+							"host": ["{{base_url}}"],
+							"path": ["notifications", ":id"],
+							"variable": [{"key": "id", "value": "notification_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Create Notification",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"recipientId\": \"user_id_here\",\n  \"title\": \"Payment Reminder\",\n  \"message\": \"Your membership payment is due soon\",\n  \"type\": \"PAYMENT_REMINDER\",\n  \"sendMethod\": \"EMAIL\",\n  \"scheduledTime\": \"2024-01-01T10:00:00.000Z\"\n}"
+						},
+						"url": {"raw": "{{base_url}}/notifications", "host": ["{{base_url}}"], "path": ["notifications"]}
+					}
+				},
+				{
+					"name": "Update Notification",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {"mode": "raw", "raw": "{\n  \"readStatus\": true\n}"},
+						"url": {
+							"raw": "{{base_url}}/notifications/:id",
+							"host": ["{{base_url}}"],
+							"path": ["notifications", ":id"],
+							"variable": [{"key": "id", "value": "notification_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Delete Notification",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "{{base_url}}/notifications/:id",
+							"host": ["{{base_url}}"],
+							"path": ["notifications", ":id"],
+							"variable": [{"key": "id", "value": "notification_id_here"}]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Roles & Permissions",
+			"item": [
+				{
+					"name": "Get All Roles & Permissions",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "{{base_url}}/roles-permissions", "host": ["{{base_url}}"], "path": ["roles-permissions"]}
+					}
+				},
+				{
+					"name": "Get Role & Permission By ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/roles-permissions/:id",
+							"host": ["{{base_url}}"],
+							"path": ["roles-permissions", ":id"],
+							"variable": [{"key": "id", "value": "role_permission_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Create Role & Permission",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"roleName\": \"MANAGER\",\n  \"description\": \"Gym manager with full access\",\n  \"permissions\": [\n    {\n      \"resource\": \"members\",\n      \"actions\": [\"CREATE\", \"READ\", \"UPDATE\", \"DELETE\"]\n    },\n    {\n      \"resource\": \"subscriptions\",\n      \"actions\": [\"READ\", \"UPDATE\"]\n    }\n  ]\n}"
+						},
+						"url": {"raw": "{{base_url}}/roles-permissions", "host": ["{{base_url}}"], "path": ["roles-permissions"]}
+					}
+				},
+				{
+					"name": "Update Role & Permission",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {"mode": "raw", "raw": "{\n  \"description\": \"Updated manager role\"\n}"},
+						"url": {
+							"raw": "{{base_url}}/roles-permissions/:id",
+							"host": ["{{base_url}}"],
+							"path": ["roles-permissions", ":id"],
+							"variable": [{"key": "id", "value": "role_permission_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Delete Role & Permission",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "{{base_url}}/roles-permissions/:id",
+							"host": ["{{base_url}}"],
+							"path": ["roles-permissions", ":id"],
+							"variable": [{"key": "id", "value": "role_permission_id_here"}]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Enquiries",
+			"item": [
+				{
+					"name": "Get All Enquiries",
+					"request": {
+						"method": "GET",
+						"url": {"raw": "{{base_url}}/enquiries", "host": ["{{base_url}}"], "path": ["enquiries"]}
+					}
+				},
+				{
+					"name": "Get Enquiry By ID",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/enquiries/:id",
+							"host": ["{{base_url}}"],
+							"path": ["enquiries", ":id"],
+							"variable": [{"key": "id", "value": "enquiry_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Get Enquiries By Gym ID",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"gymId\": \"gym_id_here\"\n}"
+						},
+						"url": {"raw": "{{base_url}}/enquiries/by-gym", "host": ["{{base_url}}"], "path": ["enquiries", "by-gym"]}
+					}
+				},
+				{
+					"name": "Create Enquiry",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"gymId\": \"gym_id_here\",\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"phone\": \"+1234567890\",\n  \"message\": \"Interested in premium membership\",\n  \"enquiryType\": \"MEMBERSHIP\",\n  \"status\": \"PENDING\"\n}"
+						},
+						"url": {"raw": "{{base_url}}/enquiries", "host": ["{{base_url}}"], "path": ["enquiries"]}
+					}
+				},
+				{
+					"name": "Update Enquiry",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {"mode": "raw", "raw": "{\n  \"status\": \"RESOLVED\",\n  \"response\": \"Membership details sent via email\"\n}"},
+						"url": {
+							"raw": "{{base_url}}/enquiries/:id",
+							"host": ["{{base_url}}"],
+							"path": ["enquiries", ":id"],
+							"variable": [{"key": "id", "value": "enquiry_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Delete Enquiry",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "{{base_url}}/enquiries/:id",
+							"host": ["{{base_url}}"],
+							"path": ["enquiries", ":id"],
+							"variable": [{"key": "id", "value": "enquiry_id_here"}]
+						}
+					}
+				},
+				{
+					"name": "Update Enquiry Status",
+					"request": {
+						"method": "PATCH",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {"mode": "raw", "raw": "{\n  \"_id\": \"enquiry_id_here\",\n  \"isActive\": 0\n}"},
+						"url": {"raw": "{{base_url}}/enquiries/status", "host": ["{{base_url}}"], "path": ["enquiries", "status"]}
+					}
+				}
+			]
+		}
+	]
+}
