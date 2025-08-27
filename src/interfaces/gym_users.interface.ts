@@ -1,8 +1,11 @@
 import { Document } from 'mongoose';
 
-export interface Password extends Document {
+export interface GymUser extends Document {
+  gymId: string;
   userId: string;
-  passwordHash: string;
+  role: number; // 0-Admin, 1-Staff
+  email: string;
+  isActive: number;
   createdAt: Date;
   updatedAt: Date;
   createdBy?: string;

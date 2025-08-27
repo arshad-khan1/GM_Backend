@@ -1,22 +1,17 @@
 import { Request } from 'express';
+import { Document } from 'mongoose';
 
-export interface User {
-  _id: string;
-  name: string;
+export interface User extends Document {
+  role: number; // 0-Superadmin, 1-Admin(Owner)/Staff, 2-Member
   email: string;
-  rolePreference: 'SELLER' | 'BUYER' | 'BOTH';
-  roles: number;
-  password?: string;
-  contactNumber: string;
-  companyName: string;
-  city: string;
-  verified: number;
+  fullName: string;
+  phone?: string;
+  profilePhotoUrl?: string;
   isActive: number;
-  metadata: any;
   createdAt: Date;
-  createdBy: string | null;
   updatedAt: Date;
-  updatedBy: string | null;
+  createdBy?: string;
+  updatedBy?: string;
 }
 
 export interface RequestWithUser extends Request {
