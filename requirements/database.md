@@ -11,6 +11,7 @@
   "phone": String,
   "profilePhotoUrl": String,
   "isActive": number,
+  "isVerified": number,
   "createdAt": ISODate,
   "updatedAt": ISODate,
   "createdBy": ObjectId,
@@ -76,7 +77,6 @@ Gym branches created by owners
   "gymId": ObjectId,
   "userId": ObjectId,
   "role": number,    *// 0-Admin, 1-Staff*
-  "email": String,
   "isActive": number,
   "createdAt": ISODate,
   "updatedAt": ISODate,

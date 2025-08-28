@@ -8,6 +8,7 @@ export interface User extends Document {
   phone?: string;
   profilePhotoUrl?: string;
   isActive: number;
+  isVerified: number;
   createdAt: Date;
   updatedAt: Date;
   createdBy?: string;

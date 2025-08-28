@@ -21,12 +21,6 @@ const gymUserSchema: Schema = new Schema(
       enum: [0, 1], // 0-Admin, 1-Staff
       default: 1, // Default to Staff
     },
-    email: {
-      type: String,
-      required: true,
-      trim: true,
-      lowercase: true,
-    },
     isActive: {
       type: Number,
       default: 1, // 0 - Inactive, 1 - Active

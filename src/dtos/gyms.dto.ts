@@ -1,9 +1,10 @@
-import { IsString, IsOptional, IsNumber, ValidateNested, IsMongoId } from 'class-validator';
+import { IsString, IsOptional, IsNumber, ValidateNested, IsMongoId, IsNotEmpty } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class AddressDto {
   @IsString()
-  public line1: string;
+  @IsOptional()
+  public line1?: string;
 
   @IsString()
   @IsOptional()
@@ -13,12 +14,15 @@ class AddressDto {
   public city: string;
 
   @IsString()
-  public state: string;
+  @IsOptional()
+  public state?: string;
 
   @IsString()
-  public zipcode: string;
+  @IsOptional()
+  public zipcode?: string;
 
   @IsString()
+  @IsOptional()
   public country: string;
 }
 
@@ -34,19 +38,19 @@ class LocationDto {
 }
 
 export class CreateGymDto {
-  @IsMongoId()
-  public ownerId: string;
-
   @IsString()
+  @IsNotEmpty()
   public name: string;
 
   @ValidateNested()
+  @IsOptional()
   @Type(() => AddressDto)
-  public address: AddressDto;
+  public address?: AddressDto;
 
   @ValidateNested()
+  @IsOptional()
   @Type(() => LocationDto)
-  public location: LocationDto;
+  public location?: LocationDto;
 
   @IsNumber()
   @IsOptional()
@@ -54,7 +58,7 @@ export class CreateGymDto {
 
   @IsMongoId()
   @IsOptional()
-  public createdBy?: string;
+  public userId?: string;
 }
 
 export class UpdateGymDto {

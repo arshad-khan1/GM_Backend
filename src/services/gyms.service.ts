@@ -3,6 +3,8 @@ import { CreateGymDto, UpdateGymDto, UpdateGymStatusDto } from '@dtos/gyms.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { Gym } from '@interfaces/gyms.interface';
+import GymUserModel from '@/models/gym_users.model';
+import { GymUser } from '@/interfaces/gym_users.interface';
 
 class GymsService {
   public async findAllGyms(): Promise<Gym[]> {
@@ -19,16 +21,40 @@ class GymsService {
     return findGym;
   }
 
-  public async createGym(gymData: CreateGymDto): Promise<Gym> {
+  public async createGym(gymData: CreateGymDto): Promise<{ gymData: Gym; gymUserData: GymUser }> {
     if (isEmpty(gymData)) throw new HttpException(400, 'gymData is empty');
 
     const createGymData = await GymModel.create({
-      ...gymData,
+      name: gymData.name,
+      address: {
+        line1: gymData?.address?.line1,
+        line2: gymData?.address?.line2,
+        city: gymData?.address?.city,
+        state: gymData?.address?.state,
+        zipcode: gymData?.address?.zipcode,
+        country: gymData?.address?.country,
+      },
+      location: {
+        lat: gymData?.location?.lat,
+        lon: gymData?.location?.lon,
+        name: gymData?.location?.name,
+      },
+      ownerId: gymData.userId,
+      createdBy: gymData.userId,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
 
-    return createGymData;
+    const createGymUserData = await GymUserModel.create({
+      gymId: createGymData._id,
+      userId: gymData.userId,
+      role: 0, // For Admin
+      createdBy: gymData.userId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
+    return { gymData: createGymData, gymUserData: createGymUserData };
   }
 
   public async updateGym(gymId: string, gymData: UpdateGymDto): Promise<Gym> {

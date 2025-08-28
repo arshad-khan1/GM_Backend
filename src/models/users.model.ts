@@ -28,6 +28,10 @@ const userSchema: Schema = new Schema({
     type: String,
     default: '',
   },
+  isVerified: {
+    type: Number,
+    default: 0, // 0 - Not Verified, 1 - Verified
+  },
   isActive: {
     type: Number,
     default: 1, // 0 - Inactive, 1 - Active
