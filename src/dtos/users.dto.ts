@@ -1,82 +1,51 @@
-import { IsString, IsEmail, IsEnum, IsNumber, IsOptional } from 'class-validator';
+import { IsString, IsEmail, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
-  public name: string;
+  public fullName: string;
 
   @IsEmail()
   public email: string;
 
-  @IsEnum(['SELLER', 'BUYER', 'BOTH'])
-  public rolePreference: 'SELLER' | 'BUYER' | 'BOTH';
+  @IsNumber()
+  public role: number;
+
+  @IsString()
+  public phone: string;
+
+  @IsString()
+  public profilePhotoUrl: string;
 
   @IsNumber()
-  public roles: number;
-
-  @IsString()
-  public password: string;
-
-  @IsString()
-  @IsOptional()
-  public contactNumber?: string;
-
-  @IsString()
-  @IsOptional()
-  public companyName?: string;
-
-  @IsString()
-  @IsOptional()
-  public city?: string;
-
-  @IsNumber()
-  @IsOptional()
-  public verified?: number;
-
-  @IsNumber()
-  @IsOptional()
-  public isActive?: number;
-
-  @IsOptional()
-  public metadata?: any;
+  public isVerified: number;
 }
 
 export class UpdateUserDto {
   @IsString()
   @IsOptional()
-  public name?: string;
+  public fullName?: string;
 
   @IsEmail()
   @IsOptional()
   public email?: string;
 
-  @IsEnum(['SELLER', 'BUYER', 'BOTH'])
+  @IsNumber()
   @IsOptional()
-  public rolePreference?: 'SELLER' | 'BUYER' | 'BOTH';
+  public role?: number;
+
+  @IsString()
+  @IsOptional()
+  public phone?: string;
+
+  @IsString()
+  @IsOptional()
+  public profilePhotoUrl?: string;
 
   @IsNumber()
   @IsOptional()
-  public roles?: number;
-
-  @IsString()
-  @IsOptional()
-  public contactNumber?: string;
-
-  @IsString()
-  @IsOptional()
-  public companyName?: string;
-
-  @IsString()
-  @IsOptional()
-  public city?: string;
-
-  @IsNumber()
-  @IsOptional()
-  public verified?: number;
+  public isVerified?: number;
 
   @IsNumber()
   @IsOptional()
   public isActive?: number;
-
-  @IsOptional()
-  public metadata?: any;
 }

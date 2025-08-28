@@ -14,13 +14,30 @@ import { HttpException } from '@exceptions/HttpException';
 export const ValidationMiddleware = (type: any, skipMissingProperties = false, whitelist = false, forbidNonWhitelisted = false) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const dto = plainToInstance(type, req.body);
+
     validateOrReject(dto, { skipMissingProperties, whitelist, forbidNonWhitelisted })
       .then(() => {
         req.body = dto;
         next();
       })
       .catch((errors: ValidationError[]) => {
-        const message = errors.map((error: ValidationError) => Object.values(error.constraints)).join(', ');
+        const message = errors
+          .map((error: ValidationError) => {
+            if (error.constraints) {
+              return Object.values(error.constraints).join(', ');
+            }
+            // Handle nested validation errors recursively
+            if (error.children?.length) {
+              return error.children
+                .map(child => (child.constraints ? Object.values(child.constraints).join(', ') : ''))
+                .filter(Boolean)
+                .join(', ');
+            }
+            return 'Validation failed';
+          })
+          .filter(Boolean)
+          .join(', ');
+
         next(new HttpException(400, message));
       });
   };

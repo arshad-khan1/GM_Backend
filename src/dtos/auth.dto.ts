@@ -1,17 +1,41 @@
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
-export class RegisterDto {
+export class RegisterOwnerByEmailDto {
+  @IsString()
+  @IsNotEmpty()
+  public name: string;
+
   @IsEmail()
+  @IsNotEmpty()
   public email: string;
 
   @IsString()
+  @IsNotEmpty()
   public password: string;
 }
 
-export class LoginDto {
+export class RegisterOwnerByPhoneDto {
+  @IsString()
+  @IsNotEmpty()
+  public name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  public phone: string;
+}
+
+export class LoginOwnerByEmailDto {
   @IsEmail()
+  @IsNotEmpty()
   public email: string;
 
   @IsString()
+  @IsNotEmpty()
   public password: string;
+}
+
+export class LoginOwnerByPhoneDto {
+  @IsString()
+  @IsNotEmpty()
+  public phone: string;
 }

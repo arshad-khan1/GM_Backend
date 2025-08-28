@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { LoginDto, RegisterDto } from '@dtos/auth.dto';
+import { LoginOwnerByEmailDto, LoginOwnerByPhoneDto, RegisterOwnerByEmailDto, RegisterOwnerByPhoneDto } from '@dtos/auth.dto';
 import { Routes } from '@interfaces/routes.interface';
 import { ValidationMiddleware } from '@middlewares/validation.middleware';
 import { AuthController } from '@/controllers/auth.controller';
@@ -14,8 +14,15 @@ export class AuthRoute implements Routes {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}/register`, ValidationMiddleware(RegisterDto), this.authController.register);
-    this.router.post(`${this.path}/login`, ValidationMiddleware(LoginDto), this.authController.login);
+    // Owner Register
+    this.router.post(`${this.path}/register/owner/email`, ValidationMiddleware(RegisterOwnerByEmailDto), this.authController.registerOwnerByEmail);
+    this.router.post(`${this.path}/register/owner/phone`, ValidationMiddleware(RegisterOwnerByPhoneDto), this.authController.registerOwnerByPhone);
+    // this.router.post(`${this.path}/register/owner/google`, ValidationMiddleware(RegisterDto), this.authController.registerOwnerByGoogle);
+    // Login
+    this.router.post(`${this.path}/login/owner/email`, ValidationMiddleware(LoginOwnerByEmailDto), this.authController.loginOwnerByEmail);
+    this.router.post(`${this.path}/login/owner/phone`, ValidationMiddleware(LoginOwnerByPhoneDto), this.authController.loginOwnerByPhone);
+    // this.router.post(`${this.path}/login/owner/google`, ValidationMiddleware(LoginDto), this.authController.loginOwnerByGoogle);
+    // Logout
     this.router.post(`${this.path}/logout`, this.authController.logout);
   }
 }
