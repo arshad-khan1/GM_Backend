@@ -2,6 +2,7 @@ import { Document } from 'mongoose';
 
 export interface Enquiry extends Document {
   gymId: string;
+  handledBy: string;
   title: string;
   description: string;
   name: string;

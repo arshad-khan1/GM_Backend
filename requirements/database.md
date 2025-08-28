@@ -119,9 +119,10 @@ Registered gym members
   "_id": ObjectId,
   "gymId": ObjectId,             *// references gyms._id*
   "userId": ObjectId,            *// references users._id*
+  "registeredBy": ObjectId,         *// references gymUsers._id*
   "batch": String,
   "dateOfBirth": Date,
-  **"subscriptions": [ObjectId],
+  "subscriptions": [ObjectId],
   "isActive": number,
   "createdAt": ISODate,
   "updatedAt": ISODate,
@@ -231,7 +232,8 @@ Role-based access controls (fine-grained permission settings)
 ```jsx
 {
   "_id": ObjectId,
-  "gym_id": ObjectId,
+  "gymId": ObjectId,
+  "handledBy": ObjectId,    *// references gymUsers._id*
   "title": String,
   "description": String,
   "name": String,
