@@ -30,9 +30,9 @@ export class AuthController {
   public loginOwnerByEmail = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { email, password } = req.body;
-      const { token, user, gym, gymUser } = await this.authService.loginOwnerByEmail(email, password);
+      const { token, user } = await this.authService.loginOwnerByEmail(email, password);
 
-      res.status(200).json({ data: { user, token, gym, gymUser }, message: 'login' });
+      res.status(200).json({ data: { user, token }, message: 'login' });
     } catch (error) {
       next(error);
     }

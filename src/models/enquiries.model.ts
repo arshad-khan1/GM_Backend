@@ -9,6 +9,11 @@ const enquirySchema: Schema = new Schema(
       required: true,
       index: true,
     },
+    handledBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'GymUser',
+      default: null,
+    },
     title: {
       type: String,
       required: true,

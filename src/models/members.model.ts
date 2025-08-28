@@ -15,6 +15,11 @@ const memberSchema: Schema = new Schema(
       required: true,
       index: true,
     },
+    registeredBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'GymUser',
+      default: null,
+    },
     batch: {
       type: String,
       trim: true,
