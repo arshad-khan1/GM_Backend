@@ -13,6 +13,17 @@ import { PaymentsRoute } from '@routes/payments.route';
 import { NotificationsRoute } from '@routes/notifications.route';
 import { RolePermissionsRoute } from '@routes/roles_permissions.route';
 
+// Global error handlers to surface crashes during development
+process.on('unhandledRejection', reason => {
+  // eslint-disable-next-line no-console
+  console.error('[UNHANDLED_REJECTION]', reason);
+});
+
+process.on('uncaughtException', err => {
+  // eslint-disable-next-line no-console
+  console.error('[UNCAUGHT_EXCEPTION]', err);
+});
+
 ValidateEnv();
 
 const app = new App([
