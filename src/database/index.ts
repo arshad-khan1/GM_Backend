@@ -13,6 +13,14 @@ export const dbConnection = async () => {
   if (NODE_ENV !== 'production') {
     set('debug', true);
   }
-
-  await connect(dbConfig.url, dbConfig.options);
+  try {
+    if (!dbConfig.url) {
+      throw new Error('DB_URL is not defined. Check your environment variables.');
+    }
+    await connect(dbConfig.url, dbConfig.options);
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('[DB_CONNECTION_ERROR]', err);
+    throw err;
+  }
 };

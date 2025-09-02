@@ -1,17 +1,41 @@
 import { IsOptional, IsNumber, IsMongoId, IsEmail } from 'class-validator';
+import { IsObject, ValidateNested, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+
+export class UserInfoDto {
+  @IsString()
+  @IsOptional()
+  public name?: string;
+
+  @IsEmail()
+  @IsOptional()
+  public email?: string;
+
+  @IsString()
+  @IsOptional()
+  public phone?: string;
+
+  @IsString()
+  @IsOptional()
+  public profilePhotoUrl?: string;
+}
 
 export class CreateGymUserDto {
   @IsMongoId()
   public gymId: string;
 
   @IsMongoId()
-  public userId: string;
+  @IsOptional()
+  public userId?: string;
 
   @IsNumber()
   public role: number; // 0-Admin, 1-Staff
 
-  @IsEmail()
-  public email: string;
+  @IsObject()
+  @ValidateNested()
+  @Type(() => UserInfoDto)
+  @IsOptional()
+  public userInfo?: UserInfoDto;
 
   @IsNumber()
   @IsOptional()
@@ -35,9 +59,11 @@ export class UpdateGymUserDto {
   @IsOptional()
   public role?: number;
 
-  @IsEmail()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => UserInfoDto)
   @IsOptional()
-  public email?: string;
+  public userInfo?: UserInfoDto;
 
   @IsNumber()
   @IsOptional()

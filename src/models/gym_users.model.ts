@@ -15,6 +15,28 @@ const gymUserSchema: Schema = new Schema(
       required: true,
       index: true,
     },
+    userInfo: {
+      name: {
+        type: String,
+        trim: true,
+        default: '',
+      },
+      email: {
+        type: String,
+        trim: true,
+        lowercase: true,
+        default: '',
+      },
+      phone: {
+        type: String,
+        trim: true,
+        default: '',
+      },
+      profilePhotoUrl: {
+        type: String,
+        default: '',
+      },
+    },
     role: {
       type: Number,
       required: true,
