@@ -1,31 +1,31 @@
-import GymUserModel from '@models/gym_users.model';
-import { CreateGymUserDto, UpdateGymUserDto, UpdateGymUserStatusDto } from '@dtos/gym_users.dto';
+import GymUserModel from '@/models/staff.model';
+import { CreateStaffDto, UpdateStaffDto, UpdateStaffStatusDto } from '@/dtos/staff.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
-import { GymUser } from '@interfaces/gym_users.interface';
 import UserModel from '@models/users.model';
+import { Staff } from '@/interfaces/staff.interface';
 
-class GymUsersService {
-  public async findAllGymUsers(): Promise<GymUser[]> {
-    const gymUsers = await GymUserModel.find();
-    return gymUsers;
+class StaffService {
+  public async findAllStaff(): Promise<Staff[]> {
+    const staff = await GymUserModel.find();
+    return staff;
   }
 
-  public async findGymUserById(gymUserId: string): Promise<GymUser> {
-    if (isEmpty(gymUserId)) throw new HttpException(400, 'GymUserId is empty');
+  public async findStaffById(staffId: string): Promise<Staff> {
+    if (isEmpty(staffId)) throw new HttpException(400, 'staffId is empty');
 
-    const findGymUser = await GymUserModel.findOne({ _id: gymUserId });
-    if (!findGymUser) throw new HttpException(409, "GymUser doesn't exist");
+    const findStaff = await GymUserModel.findOne({ _id: staffId });
+    if (!findStaff) throw new HttpException(409, "Staff doesn't exist");
 
-    return findGymUser;
+    return findStaff;
   }
 
-  public async createGymUser(gymUserData: CreateGymUserDto): Promise<GymUser> {
-    if (isEmpty(gymUserData)) throw new HttpException(400, 'gymUserData is empty');
+  public async createStaff(staffData: CreateStaffDto): Promise<Staff> {
+    if (isEmpty(staffData)) throw new HttpException(400, 'staffData is empty');
 
     // Step 1: resolve/create user first
-    let resolvedUserId = gymUserData.userId;
-    const info = (gymUserData.userInfo || {}) as any;
+    let resolvedUserId = staffData.userId;
+    const info = (staffData.userInfo || {}) as any;
 
     if (!resolvedUserId) {
       // Try to find by email if provided
@@ -49,9 +49,9 @@ class GymUsersService {
             fullName: info.name || '',
             phone: info.phone || '',
             profilePhotoUrl: info.profilePhotoUrl || '',
-            isActive: gymUserData.isActive ?? 1,
-            createdBy: gymUserData.createdBy || null,
-            updatedBy: gymUserData.createdBy || null,
+            isActive: staffData.isActive ?? 1,
+            createdBy: staffData.createdBy || null,
+            updatedBy: staffData.createdBy || null,
             createdAt: new Date(),
             updatedAt: new Date(),
           });
@@ -61,7 +61,7 @@ class GymUsersService {
         // Cannot create user without either userId or email
         throw new HttpException(400, 'Either userId or userInfo.email is required to create a gym user');
       }
-    } else if (gymUserData.userInfo) {
+    } else if (staffData.userInfo) {
       // If userId provided, update user with given info
       const { name, email, phone, profilePhotoUrl } = info;
       const updatePayload: any = {};
@@ -75,41 +75,41 @@ class GymUsersService {
     }
 
     // Step 2: if relation exists, update it; else create new
-    const existingRelation = await GymUserModel.findOne({ gymId: gymUserData.gymId, userId: resolvedUserId });
+    const existingRelation = await GymUserModel.findOne({ gymId: staffData.gymId, userId: resolvedUserId });
     if (existingRelation) {
       const updatePayload: any = {
         updatedAt: new Date(),
       };
-      if (gymUserData.role !== undefined) updatePayload.role = gymUserData.role;
-      if (gymUserData.userInfo !== undefined) updatePayload.userInfo = gymUserData.userInfo;
-      if (gymUserData.isActive !== undefined) updatePayload.isActive = gymUserData.isActive;
-      if ((gymUserData as any).updatedBy !== undefined) updatePayload.updatedBy = (gymUserData as any).updatedBy;
+      if (staffData.role !== undefined) updatePayload.role = staffData.role;
+      if (staffData.userInfo !== undefined) updatePayload.userInfo = staffData.userInfo;
+      if (staffData.isActive !== undefined) updatePayload.isActive = staffData.isActive;
+      if ((staffData as any).updatedBy !== undefined) updatePayload.updatedBy = (staffData as any).updatedBy;
 
       const updated = await GymUserModel.findByIdAndUpdate(existingRelation._id, updatePayload, { new: true });
       return updated as any;
     }
 
-    const createGymUserData = await GymUserModel.create({
-      ...gymUserData,
+    const createStaffData = await GymUserModel.create({
+      ...staffData,
       userId: resolvedUserId,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
 
-    return createGymUserData;
+    return createStaffData;
   }
 
-  public async updateGymUser(gymUserId: string, gymUserData: UpdateGymUserDto): Promise<GymUser> {
-    if (isEmpty(gymUserData)) throw new HttpException(400, 'gymUserData is empty');
+  public async updateStaff(staffId: string, staffData: UpdateStaffDto): Promise<Staff> {
+    if (isEmpty(staffData)) throw new HttpException(400, 'staffData is empty');
 
-    const updateGymUserById = await GymUserModel.findByIdAndUpdate(gymUserId, { ...gymUserData, updatedAt: new Date() }, { new: true });
-    if (!updateGymUserById) throw new HttpException(409, "GymUser doesn't exist");
+    const updateStaffById = await GymUserModel.findByIdAndUpdate(staffId, { ...staffData, updatedAt: new Date() }, { new: true });
+    if (!updateStaffById) throw new HttpException(409, "Staff doesn't exist");
 
     // Sync userInfo to Users collection if provided
-    if (gymUserData.userInfo) {
-      const targetUserId = gymUserData.userId || (updateGymUserById as any).userId?.toString();
+    if (staffData.userInfo) {
+      const targetUserId = staffData.userId || (updateStaffById as any).userId?.toString();
       if (targetUserId) {
-        const { name, email, phone, profilePhotoUrl } = gymUserData.userInfo as any;
+        const { name, email, phone, profilePhotoUrl } = staffData.userInfo as any;
         const updatePayload: any = {};
         if (name !== undefined) updatePayload.fullName = name;
         if (email !== undefined) updatePayload.email = email;
@@ -121,28 +121,28 @@ class GymUsersService {
       }
     }
 
-    return updateGymUserById;
+    return updateStaffById;
   }
 
-  public async deleteGymUser(gymUserId: string): Promise<GymUser> {
-    const deleteGymUserById = await GymUserModel.findByIdAndDelete(gymUserId);
-    if (!deleteGymUserById) throw new HttpException(409, "GymUser doesn't exist");
+  public async deleteStaff(staffId: string): Promise<Staff> {
+    const deleteStaffById = await GymUserModel.findByIdAndDelete(staffId);
+    if (!deleteStaffById) throw new HttpException(409, "Staff doesn't exist");
 
-    return deleteGymUserById;
+    return deleteStaffById;
   }
 
-  public async updateGymUserStatus(statusData: UpdateGymUserStatusDto): Promise<GymUser> {
+  public async updateStaffStatus(statusData: UpdateStaffStatusDto): Promise<Staff> {
     if (isEmpty(statusData)) throw new HttpException(400, 'statusData is empty');
 
-    const updateGymUserStatus = await GymUserModel.findByIdAndUpdate(
+    const updateStaffStatus = await GymUserModel.findByIdAndUpdate(
       statusData._id,
       { isActive: statusData.isActive, updatedAt: new Date() },
       { new: true },
     );
-    if (!updateGymUserStatus) throw new HttpException(409, "GymUser doesn't exist");
+    if (!updateStaffStatus) throw new HttpException(409, "Staff doesn't exist");
 
-    return updateGymUserStatus;
+    return updateStaffStatus;
   }
 }
 
-export default GymUsersService;
+export default StaffService;

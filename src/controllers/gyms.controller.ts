@@ -70,4 +70,15 @@ export class GymsController {
       next(error);
     }
   };
+
+  public getGymByOwnerId = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const gymId: string = req.params.owner_id;
+      const getGymByOwnerIdData = await this.gymsService.getGymByOwnerId(gymId);
+
+      res.status(200).json({ data: getGymByOwnerIdData, message: 'found' });
+    } catch (error) {
+      next(error);
+    }
+  };
 }

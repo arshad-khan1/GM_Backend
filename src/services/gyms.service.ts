@@ -3,8 +3,7 @@ import { CreateGymDto, UpdateGymDto, UpdateGymStatusDto } from '@dtos/gyms.dto';
 import { HttpException } from '@exceptions/HttpException';
 import { isEmpty } from '@utils/util';
 import { Gym } from '@interfaces/gyms.interface';
-import GymUserModel from '@/models/gym_users.model';
-import { GymUser } from '@/interfaces/gym_users.interface';
+import UserModel from '@/models/users.model';
 
 class GymsService {
   public async findAllGyms(): Promise<Gym[]> {
@@ -21,8 +20,11 @@ class GymsService {
     return findGym;
   }
 
-  public async createGym(gymData: CreateGymDto): Promise<{ gymData: Gym; gymUserData: GymUser }> {
+  public async createGym(gymData: CreateGymDto): Promise<{ gymData: Gym }> {
     if (isEmpty(gymData)) throw new HttpException(400, 'gymData is empty');
+
+    const user = await UserModel.findById(gymData.userId);
+    if (!user) throw new HttpException(409, "User doesn't exist");
 
     const createGymData = await GymModel.create({
       name: gymData.name,
@@ -39,22 +41,14 @@ class GymsService {
         lon: gymData?.location?.lon,
         name: gymData?.location?.name,
       },
+      note: gymData.note,
       ownerId: gymData.userId,
       createdBy: gymData.userId,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
 
-    const createGymUserData = await GymUserModel.create({
-      gymId: createGymData._id,
-      userId: gymData.userId,
-      role: 0, // For Admin
-      createdBy: gymData.userId,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
-
-    return { gymData: createGymData, gymUserData: createGymUserData };
+    return { gymData: createGymData };
   }
 
   public async updateGym(gymId: string, gymData: UpdateGymDto): Promise<Gym> {
@@ -80,6 +74,15 @@ class GymsService {
     if (!updateGymStatus) throw new HttpException(409, "Gym doesn't exist");
 
     return updateGymStatus;
+  }
+
+  public async getGymByOwnerId(ownerId: string): Promise<Gym[]> {
+    if (isEmpty(ownerId)) throw new HttpException(400, 'ownerId is empty');
+
+    const getGymByOwnerId = await GymModel.find({ ownerId });
+    if (!getGymByOwnerId) throw new HttpException(409, "Gym doesn't exist");
+
+    return getGymByOwnerId;
   }
 }
 

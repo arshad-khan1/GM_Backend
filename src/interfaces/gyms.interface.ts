@@ -20,6 +20,7 @@ export interface Gym extends Document {
   name: string;
   address: GymAddress;
   location: GymLocation;
+  note: string;
   isActive: number;
   createdAt: Date;
   updatedAt: Date;

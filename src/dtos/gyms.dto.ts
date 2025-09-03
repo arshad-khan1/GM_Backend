@@ -59,6 +59,10 @@ export class CreateGymDto {
   @IsMongoId()
   @IsOptional()
   public userId?: string;
+
+  @IsString()
+  @IsOptional()
+  public note?: string;
 }
 
 export class UpdateGymDto {
@@ -87,6 +91,10 @@ export class UpdateGymDto {
   @IsMongoId()
   @IsOptional()
   public updatedBy?: string;
+
+  @IsString()
+  @IsOptional()
+  public note?: string;
 }
 
 export class UpdateGymStatusDto {

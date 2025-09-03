@@ -1,7 +1,7 @@
+import { Staff } from '@/interfaces/staff.interface';
 import mongoose, { Schema, Document } from 'mongoose';
-import { GymUser } from '@interfaces/gym_users.interface';
 
-const gymUserSchema: Schema = new Schema(
+const staffSchema: Schema = new Schema(
   {
     gymId: {
       type: Schema.Types.ObjectId,
@@ -37,12 +37,6 @@ const gymUserSchema: Schema = new Schema(
         default: '',
       },
     },
-    role: {
-      type: Number,
-      required: true,
-      enum: [0, 1], // 0-Admin, 1-Staff
-      default: 1, // Default to Staff
-    },
     isActive: {
       type: Number,
       default: 1, // 0 - Inactive, 1 - Active
@@ -72,8 +66,8 @@ const gymUserSchema: Schema = new Schema(
 );
 
 // Add compound index for unique gym-user relationship
-gymUserSchema.index({ gymId: 1, userId: 1 }, { unique: true });
+staffSchema.index({ gymId: 1, userId: 1 }, { unique: true });
 
-const GymUserModel = mongoose.model<GymUser & Document>('GymUser', gymUserSchema);
+const StaffModel = mongoose.model<Staff & Document>('Staff', staffSchema);
 
-export default GymUserModel;
+export default StaffModel;

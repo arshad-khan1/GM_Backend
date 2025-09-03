@@ -21,5 +21,6 @@ export class GymsRoute implements Routes {
     this.router.put(`${this.path}/:id`, AuthMiddleware, ValidationMiddleware(UpdateGymDto), this.gymsController.updateGym);
     this.router.delete(`${this.path}/:id`, AuthMiddleware, this.gymsController.deleteGym);
     this.router.patch(`${this.path}/status`, AuthMiddleware, ValidationMiddleware(UpdateGymStatusDto), this.gymsController.updateGymStatus);
+    this.router.get(`${this.path}/owner/:owner_id`, AuthMiddleware, this.gymsController.getGymByOwnerId);
   }
 }

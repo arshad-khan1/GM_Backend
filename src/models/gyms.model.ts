@@ -27,6 +27,11 @@ const gymSchema: Schema = new Schema(
       lon: { type: String, required: false },
       name: { type: String, required: false, trim: true },
     },
+    note: {
+      type: String,
+      required: false,
+      trim: true,
+    },
     isActive: {
       type: Number,
       default: 1, // 0 - Inactive, 1 - Active

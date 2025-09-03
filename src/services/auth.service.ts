@@ -7,7 +7,7 @@ import { SECRET_KEY } from '@/config';
 import PasswordModel from '@/models/passwords.model';
 import { RegisterOwnerByEmailDto, RegisterOwnerByPhoneDto } from '@dtos/auth.dto';
 import GymModel from '@/models/gyms.model';
-import GymUserModel from '@/models/gym_users.model';
+import GymUserModel from '@/models/staff.model';
 
 class AuthService {
   public async registerOwnerByEmail(data: RegisterOwnerByEmailDto): Promise<{ user: any; token: string }> {

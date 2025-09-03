@@ -2,16 +2,18 @@
 
 ## users
 
+Roles: Super Admin, Owner, Staff, (future Member)
+
 ```jsx
 {
   "_id": ObjectId,
-  "role": number,    *// 0-Superadmin, 1-Admin(Owner)/Staff, 2-Member*
+  "role": number,    *// 0-Superadmin, 1-Owner, 2-Staff, 3-Member*
   "email": String,
   "fullName": String,
   "phone": String,
   "profilePhotoUrl": String,
+  "isVerified": String,
   "isActive": number,
-  "isVerified": number,
   "createdAt": ISODate,
   "updatedAt": ISODate,
   "createdBy": ObjectId,
@@ -69,14 +71,19 @@ Gym branches created by owners
 
 ---
 
-## gym_users
+## staff
 
 ```jsx
 {
   "_id": ObjectId,
   "gymId": ObjectId,
   "userId": ObjectId,
-  "role": number,    *// 0-Admin, 1-Staff*
+  **"userInfo": {
+		"name": String,
+		"email": String,
+		"phone": String,
+		"profilePhotoUrl": String
+  },
   "isActive": number,
   "createdAt": ISODate,
   "updatedAt": ISODate,
@@ -119,10 +126,16 @@ Registered gym members
   "_id": ObjectId,
   "gymId": ObjectId,             *// references gyms._id*
   "userId": ObjectId,            *// references users._id*
-  "registeredBy": ObjectId,         *// references gymUsers._id*
+  "registeredBy": ObjectId,      *// references gymUsers._id*
   "batch": String,
   "dateOfBirth": Date,
-  "subscriptions": [ObjectId],
+  **"subscriptions": [ObjectId],
+  "userInfo": {
+		"name": String,
+		"email": String,
+		"phone": String,
+		"profilePhotoUrl": String
+  },
   "isActive": number,
   "createdAt": ISODate,
   "updatedAt": ISODate,
@@ -188,7 +201,6 @@ Reminders and alerts for users
 {
   "_id": ObjectId,
   "gymId": ObjectId,
-  "gymUserId": ObjectId,          *// references users._id (owner/staff)*
   "memberId": ObjectId,        *// optional: member relevant to notification*
   "type": "payment_reminder" | "membership_renewal" | "general",
   "message": String,
@@ -211,7 +223,7 @@ Role-based access controls (fine-grained permission settings)
 ```jsx
 {
   "_id": ObjectId,
-  "role": "superadmin" | "admin" | "staff" | "member",
+  "role": "superadmin" | "owner" | "staff" | "member",
   "permissions": [
     {
       "resource": String,      *// e.g. "users", "gyms", "subscriptions"*
@@ -233,17 +245,110 @@ Role-based access controls (fine-grained permission settings)
 {
   "_id": ObjectId,
   "gymId": ObjectId,
-  "handledBy": ObjectId,    *// references gymUsers._id*
+  "handledBy": ObjectId,   //References gymUser._id
   "title": String,
   "description": String,
   "name": String,
   "phone": String,
   "Address": String,
-  "isActive": Number,       *//0-Active, 1-Inactive*
+  "isActive": Number,   *//0-Active, 1-Inactive*
   "createdAt": ISODate,
   "updatedAt": ISODate,
   "createdBy": ObjectId,
   "updatedBy": ObjectId
+}
+```
+
+---
+
+## financial_reports
+
+Precomputed financial summaries for gyms/owners
+
+```jsx
+{
+  "_id": ObjectId,
+  "gymId": ObjectId,
+  "ownerId": ObjectId,
+  "reportMonth": Number,      *// e.g., 1 - 12*
+  "reportYear": Number,
+  "totalRevenue": Number,
+  "totalPendingPayments": Number,
+  "totalAdvancePayments": Number,
+  "paymentCount": Number,
+  "createdAt": ISODate,
+  "updatedAt": ISODate,
+  "createdBy": ObjectId,
+  "updatedBy": ObjectId
+}
+```
+
+---
+
+## **app_subscriptions**
+
+```jsx
+{
+  "_id": ObjectId,
+  "ownerId": ObjectId,               // references users._id for the gym owner
+  "appPlanId": ObjectId,             // references app_plans._id (the chosen app subscription plan)
+  "status": "active" | "trial" | "expired" | "cancelled" | "suspended",
+  "trialStartDate": Date,
+  "trialEndDate": Date,
+  "subscriptionStartDate": Date,
+  "subscriptionEndDate": Date,
+  "nextPaymentDue": Date,
+  "lastPaymentDate": Date,
+  "paymentHistory": [
+    {
+      "paymentId": ObjectId,         // references app_payments._id (optional)
+      "amount": Number,
+      "paymentDate": Date,
+      "status": "successful" | "failed" | "pending",
+      "method": "card" | "upi" | "netbanking" | "paypal"
+    }
+  ],
+  "planFeatures": [String],          // Cached features enabled by the plan for easier reference
+  "createdAt": Date,
+  "updatedAt": Date
+}
+
+```
+
+---
+
+## **app_payments**
+
+```jsx
+{
+  "_id": ObjectId,
+  "ownerId": ObjectId,
+  "appSubscriptionId": ObjectId,     // references app_subscriptions._id
+  "amount": Number,
+  "paymentDate": Date,
+  "status": "successful" | "failed" | "pending",
+  "method": "card" | "upi" | "netbanking" | "paypal",
+  "transactionReference": String,    // from payment gateway if any
+  "createdAt": Date,
+  "updatedAt": Date
+}
+
+```
+
+---
+
+## **app_plans**
+
+```jsx
+{
+  "_id": ObjectId,
+  "name": String,                    // e.g., "Basic", "Pro", "Enterprise"
+  "description": String,
+  "pricePerMonth": Number,           // or price per billing cycle
+  "features": [String],              // e.g., ["Branch Management", "Advanced Reporting"]
+  "isActive": Boolean,
+  "createdAt": Date,
+  "updatedAt": Date
 }
 ```
 

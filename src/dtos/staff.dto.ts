@@ -20,7 +20,7 @@ export class UserInfoDto {
   public profilePhotoUrl?: string;
 }
 
-export class CreateGymUserDto {
+export class CreateStaffDto {
   @IsMongoId()
   public gymId: string;
 
@@ -46,7 +46,7 @@ export class CreateGymUserDto {
   public createdBy?: string;
 }
 
-export class UpdateGymUserDto {
+export class UpdateStaffDto {
   @IsMongoId()
   @IsOptional()
   public gymId?: string;
@@ -74,7 +74,7 @@ export class UpdateGymUserDto {
   public updatedBy?: string;
 }
 
-export class UpdateGymUserStatusDto {
+export class UpdateStaffStatusDto {
   @IsMongoId()
   public _id: string;
 

@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-export interface GymUser extends Document {
+export interface Staff extends Document {
   gymId: string;
   userId: string;
   userInfo?: {
@@ -9,7 +9,6 @@ export interface GymUser extends Document {
     phone?: string;
     profilePhotoUrl?: string;
   };
-  role: number; // 0-Admin, 1-Staff
   isActive: number;
   createdAt: Date;
   updatedAt: Date;

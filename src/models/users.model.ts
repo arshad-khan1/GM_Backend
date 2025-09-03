@@ -5,8 +5,8 @@ const userSchema: Schema = new Schema({
   role: {
     type: Number,
     required: true,
-    enum: [0, 1, 2], // 0-Superadmin, 1-Admin(Owner)/Staff, 2-Member
-    default: 2, // Default to Member
+    enum: [0, 1, 2, 3], // 0-Superadmin, 1-Owner, 2-Staff, 3-Member
+    default: 1, // Default to Member
   },
   email: {
     type: String,
