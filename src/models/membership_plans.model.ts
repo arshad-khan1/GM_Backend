@@ -27,6 +27,14 @@ const membershipPlanSchema: Schema = new Schema(
       type: String,
       trim: true,
     },
+    bonus: {
+      type: String,
+      trim: true,
+    },
+    image: {
+      type: String,
+      trim: true,
+    },
     price: {
       type: Number,
       required: true,
