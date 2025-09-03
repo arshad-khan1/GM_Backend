@@ -6,6 +6,8 @@ export interface MembershipPlan extends Document {
   description?: string;
   durationInMonths: string;
   freeMonths?: string;
+  bonus?: string;
+  image?: string;
   price: number;
   benefits?: string[];
   isActive: number;
